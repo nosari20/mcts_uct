@@ -9,6 +9,8 @@
 #include <stdlib.h>
 #include <math.h>
 #include <time.h>
+#include <float.h>
+
 
 // Paramètres du jeu
 #define LARGEUR_MAX 9 		// nb max de fils pour un noeud (= nb max de coups possibles)
@@ -277,6 +279,24 @@ Noeud * nouveauNoeud (Noeud * parent, Coup * coup ) {
 
 	return noeud; 	
 }
+/*
+Noeud * copieNoeud (Noeud * noeud) {
+	Noeud * copy = c;	
+
+	copy->etat = copieEtat ( noeud->etat );		
+	copy->joueur = noeud->joueur;;		
+	copy->coup = noeud->coup;
+	copy->parent = noeud->parent; 
+	copy->nb_enfants = 0; 
+	
+	// POUR MCTS:
+	noeud->nb_victoires = 0;
+	noeud->nb_simus = 0;	
+	
+
+	return noeud; 	
+}*/
+
 
 // Ajouter un enfant à un parent en jouant un coup
 // retourne le pointeur sur l'enfant ajouté
@@ -403,6 +423,136 @@ FinDePartie testFin( Etat * etat ) {
 	return NON;
 }
 
+/*********************************************************************
+
+	                Partie MCTS UCT
+
+***********************************************************************/
+
+// Definition du type Noeud 
+/*
+typedef struct NoeudSt {
+		
+	int joueur; // joueur qui a joué pour arriver ici
+	Coup * coup;   // coup joué par ce joueur pour arriver ici
+	
+	Etat * etat; // etat du jeu
+			
+	struct NoeudSt * parent; 
+	struct NoeudSt * enfants[LARGEUR_MAX]; // liste d'enfants : chaque enfant correspond à un coup possible
+	int nb_enfants;	// nb d'enfants présents dans la liste
+	
+	// POUR MCTS:
+	int nb_victoires;
+	int nb_simus;
+	
+} Noeud;
+*/
+
+
+
+double compromis(){
+	printf("Compromis\n");
+	return sqrt(2);
+}
+
+double mu(Noeud *  noeud){
+	printf("Mu\n");
+	return noeud->nb_victoires / noeud->nb_simus;
+}
+
+double B(Noeud * noeud, double compromis){
+	printf("B\n");
+	int coeff = 1;
+	if(noeud->joueur == 0){
+		coeff = -1;
+	}
+
+	return coeff * mu(noeud) + compromis * sqrt(log(noeud->parent->nb_simus) / noeud->nb_simus);
+}
+
+double recompense(Noeud * n){
+	Noeud * noeud = n;
+	printf("Recompense\n");
+	if(testFin(noeud->etat) != ORDI_GAGNE){
+		return 0;
+	}else{
+		return 1;
+	}
+}
+
+Noeud *  developper(Noeud * n){
+	printf("Developper\n");
+	Noeud * noeud = n;
+	Coup * coup = coups_possibles(noeud->etat)[0];//TODO
+	Noeud * nouveauNoeud = ajouterEnfant(noeud, coup);
+	printf("Developper Fin\n");
+	return nouveauNoeud;
+}
+
+double simuler(Noeud * n){
+	printf("Simuler\n");
+	Noeud * noeud = n;
+	while(testFin(noeud->etat) == NON){
+		noeud = developper(noeud);
+	}
+	return recompense(noeud);
+}
+
+Noeud * meilleur(Noeud * n,  double compromis){
+	printf("Meilleur\n");
+	double tmpB = 0;
+	double b = -100000000;
+	int i;
+	Noeud * noeud = n;
+	Noeud * meilleur;
+	for(i = 0; i < noeud->nb_enfants; i++){
+		tmpB = B(noeud->enfants[i], compromis);
+		if(tmpB > b){
+			b = tmpB;
+			meilleur = noeud->enfants[i];
+
+		}
+	}
+	return meilleur;
+}
+
+Noeud * selectioner(Noeud * n, double compromis){
+	printf("Selectioner\n");
+	Noeud * noeud = n;
+	int i = 0;
+	while(testFin(noeud->etat) == NON){
+		printf("while %d", i);
+		i++;
+		if(coups_possibles(noeud->etat)[0] != NULL){
+			return noeud;
+		}else{
+			if(noeud->nb_enfants == 0){
+				return noeud;
+			}else{
+				noeud = developper(noeud);
+			}
+		}
+
+
+	}
+	printf("Selectioner Fin\n");
+
+}
+
+void maj(Noeud * n, double recompense){
+	printf("Maj\n");
+	Noeud * noeud = n;
+	while(noeud->parent != NULL){
+		noeud->nb_simus += 1;
+		noeud->nb_victoires += recompense;
+	}
+}
+
+
+
+
+/**********************************************************************/
 
 
 // Calcule et joue un coup de l'ordinateur avec MCTS-UCT
@@ -434,12 +584,21 @@ void ordijoue_mcts(Etat * etat, int tempsmax) {
 	/*  TODO :
 		- supprimer la sélection aléatoire du meilleur coup ci-dessus
 		- implémenter l'algorithme MCTS-UCT pour déterminer le meilleur coup ci-dessous
+	*/
+
 
 	int iter = 0;
-	
+	Noeud * noeud;
+
+	double recompense;
 	do {
 	
 	
+		noeud = selectioner(racine, compromis());
+		printf("Noeud selectioner = %d", noeud);
+		developper(noeud);
+		recompense = simuler(noeud);
+		maj(noeud,recompense);
 	
 		// à compléter par l'algorithme MCTS-UCT... 
 	
@@ -450,6 +609,8 @@ void ordijoue_mcts(Etat * etat, int tempsmax) {
 		temps = (int)( ((double) (toc - tic)) / CLOCKS_PER_SEC );
 		iter ++;
 	} while ( temps < tempsmax );
+
+	meilleur_coup = meilleur(noeud, compromis())->coup;
 	
 	/* fin de l'algorithme  */ 
 	
