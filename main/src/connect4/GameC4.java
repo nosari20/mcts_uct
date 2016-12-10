@@ -1,13 +1,10 @@
 package connect4;
 
-import mcts_uct.Action;
-import mcts_uct.Mcts_uct;
-import mcts_uct.State;
+import algorithms.MTCS_UCT;
+import algorithms.tree.Action;
+import algorithms.tree.State;
 
-import java.util.List;
 import java.util.Scanner;
-
-import static java.lang.StrictMath.sqrt;
 
 
 /**
@@ -23,6 +20,8 @@ public class GameC4 {
 
         System.out.println(state);
         System.out.println('\n');
+
+        MTCS_UCT ia = new MTCS_UCT(5);
         do{
 
 
@@ -42,7 +41,7 @@ public class GameC4 {
 
             }else{
                 System.out.println("Computer is playing...");
-                nextState = (StateC4) state.use(Mcts_uct.execute(state,5, sqrt(2)));
+                nextState = (StateC4) state.use(ia.search(state));
             }
 
 

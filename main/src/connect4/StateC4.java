@@ -1,17 +1,15 @@
 package connect4;
 
-import mcts_uct.Action;
-import mcts_uct.State;
+import algorithms.tree.Action;
+import algorithms.tree.State;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
  * Created by ACH02 on 07/12/2016.
  */
-public class StateC4 extends mcts_uct.State{
+public class StateC4 extends State {
 
     private int [][] plate;
     private int player;
@@ -32,6 +30,10 @@ public class StateC4 extends mcts_uct.State{
         super(player == 1);
         this.plate = plate;
         this.player = player;
+    }
+
+    public boolean isNonTerminal() {
+        return this.end() == End.NO;
     }
 
     public End end() {
@@ -134,6 +136,14 @@ public class StateC4 extends mcts_uct.State{
 
         return new StateC4(this.nextPlayer(), newPlate);
 
+    }
+
+    public double reward() {
+        if(this.end() != End.COMPUTER_WIN){
+            return 0;
+        }else{
+            return 1;
+        }
     }
 
     private int nextPlayer() {

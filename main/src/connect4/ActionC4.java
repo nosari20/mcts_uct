@@ -1,11 +1,11 @@
 package connect4;
 
-import mcts_uct.Action;
+import algorithms.tree.Action;
 
 /**
  * Created by ACH02 on 07/12/2016.
  */
-public class ActionC4 extends mcts_uct.Action {
+public class ActionC4 extends Action {
 
     private int column;
 
@@ -21,7 +21,7 @@ public class ActionC4 extends mcts_uct.Action {
         return "Column " +this.column;
     }
 
-    public boolean equals(Action a) {
+    public boolean equals(Object a) {
         return ((ActionC4)a).getColumn() == this.column;
     }
 }

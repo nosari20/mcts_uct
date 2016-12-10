@@ -1,4 +1,4 @@
-package mcts_uct;
+package algorithms.tree;
 
 import java.util.List;
 
@@ -14,26 +14,26 @@ public  abstract class State {
         this.computer = player;
     }
 
+
+    public enum End {NO, DRAW, COMPUTER_WIN, HUMAN_WIN }
+
     public boolean isComputer(){
         return computer;
     }
 
-
-    public enum End {NO, DRAW, COMPUTER_WIN, HUMAN_WIN }
+    public abstract boolean isNonTerminal();
 
     public abstract End end();
+
+    public abstract boolean isValideAction(Action action);
 
     public abstract List<Action> validActions();
 
     public abstract State use(Action action);
 
-    public abstract boolean isValideAction(Action action);
-
-    public abstract State copy();
+    public abstract double reward();
 
     public abstract String toString();
-
-
 
 
 }
