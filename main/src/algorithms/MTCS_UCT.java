@@ -40,21 +40,16 @@ public class MTCS_UCT {
 
         do{
 
-            System.out.println("\nLoop : " +loop++);
-            //System.out.println(i0);
-            System.out.println("TreePolicy...");
+
             Node ie = treePolicy(i0);
-            System.out.println("Expand...");
-            il = expand(ie);
+            double rk = defaultPolicy(ie);
+            backup(ie,rk);
 
-            System.out.println("DeafaultPolicy...");
-            double rk = defaultPolicy(il);
-            System.out.println("Backup...");
-            backup(il,rk);
-
+            loop++;
         }while(startTime > ((System.currentTimeMillis() / 1000) - this.budget));
 
-        return bestChild(il).action();
+        System.out.println("\nLoop : " +loop);
+        return bestChild(i0).action();
     }
 
 
@@ -64,7 +59,6 @@ public class MTCS_UCT {
             if(!i.isFullyExpanded()){
                 return expand(i);
             }else{
-                System.out.println("Cildren :" +i.childrens().size());
                 i = bestChild(i);
             }
         }
@@ -88,6 +82,7 @@ public class MTCS_UCT {
         Node i = ie;
         while(i.isNonTerminal()){
             i = expand(i);
+            i.visit();
         }
         return i.state().reward();
     }
@@ -106,15 +101,6 @@ public class MTCS_UCT {
         double tmpb;
         double bmax = -Double.MAX_VALUE;
         Node ib = null;
-        System.out.println("++++++++++++++++++++++++");
-        System.out.println("Children :" +ic.size());
-        for (Node i:
-                ic) {
-
-            System.out.println(i);
-
-        }
-        System.out.println("++++++++++++++++++++++++");
 
         for (Node i:
              ic) {
@@ -129,10 +115,9 @@ public class MTCS_UCT {
 
     private double B(Node i){
         double coeff = 1;
-        if(!i.state().isComputer()){
+        if(i.state().isComputer()){
             coeff = -1;
         }
-        System.out.println("Node for b " + i.id());
         double b;
         if(i.simulations() > 0) {
             b = coeff * (i.victories() / i.simulations()) + this.compromise * sqrt(log(i.parent().simulations()) / i.simulations());

@@ -26,14 +26,14 @@ public class GameC4 {
 
 
             if(state.getPlayer() == 0){
-                System.out.println("Entrez un colonne à jouer");
+                System.out.println("Enter column");
                 Action action = new ActionC4(sc.nextInt());
                 if(state.isValideAction(action)){
                     nextState = (StateC4) state.use(action);
                 }else{
                     while(!state.isValideAction(action)){
-                        System.out.println("Coup impossible");
-                        System.out.println("Entrez un colonne à jouer");
+                        System.out.println("Action invalid");
+                        System.out.println("Enter column");
                         action = new ActionC4(sc.nextInt());
                     }
                     nextState = (StateC4) state.use(action);
@@ -49,8 +49,6 @@ public class GameC4 {
 
 
             state = nextState;
-
-            System.out.println("**************************  GAME  **************************");
             System.out.println(state);
             System.out.println('\n');
 

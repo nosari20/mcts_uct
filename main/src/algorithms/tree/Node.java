@@ -82,20 +82,24 @@ public class Node {
     }
 
     public String toString(){
-        return this.toString("");
+        return this.toString("", false);
     }
 
-    private String toString(String space){
+    public String toStringFull(){
+        return this.toString("", true);
+    }
+
+    private String toString(String space, boolean full){
 
         String str = "";
 
-        str+="\n"+space+"| -> Node : " + no + " Simus : " + this.nb_simulations;
+        str+="\n"+space+"| -> Node : " + no + " Simus : " + this.nb_simulations + " Children :" + this.childrens.size();
         space += " ";
 
         for (Node child:
                 this.childrens) {
-            if(child.simulations()>0){
-                str+=child.toString(space);
+            if(child.simulations()>0 || full){
+                str+=child.toString(space, full);
             }else{
                 str+="\n"+space+"|~~>";
             }
