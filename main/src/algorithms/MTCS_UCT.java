@@ -13,7 +13,7 @@ import static java.lang.Math.sqrt;
 /**
  * Created by ACH02 on 09/12/2016.
  */
-public class MTCS_UCT {
+public class MTCS_UCT implements IA{
 
     private double budget;
     private double compromise;

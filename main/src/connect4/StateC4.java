@@ -163,10 +163,6 @@ public class StateC4 extends State {
         );
     }
 
-    public State copy() {
-        return new StateC4(this.player, this.plate.clone());
-    }
-
     public String toString() {
         int i,j,k;
         String str = "";
@@ -186,7 +182,7 @@ public class StateC4 extends State {
                 if(p == 0){
                     c = 'H';
                 }else if(p == 1){
-                    c = 'O';
+                    c = 'C';
                 }else{
                     c = ' ';
                 }
