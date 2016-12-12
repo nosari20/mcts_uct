@@ -1,6 +1,6 @@
 package connect4;
 
-import algorithms.IA;
+import algorithms.AI;
 import algorithms.MTCS_UCT;
 import algorithms.RANDOM;
 import algorithms.tree.Action;
@@ -30,9 +30,9 @@ public class GameC4 {
 
 
         System.out.println("Choose difficulty");
-        System.out.println("MCTS UCT IA (default): 0 | Random IA : 1");
+        System.out.println("MCTS UCT AI (default): 0 | Random AI : 1");
         int iaChoosed = sc.nextInt();
-        IA ia = new MTCS_UCT(sqrt(2));
+        AI ia = new MTCS_UCT(sqrt(2));
         if(iaChoosed == 1){
             ia = new RANDOM();
         }

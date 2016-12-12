@@ -1,7 +1,6 @@
 package algorithms;
 
 import algorithms.tree.Action;
-import algorithms.tree.Node;
 import algorithms.tree.State;
 
 import java.util.List;
@@ -10,7 +9,7 @@ import java.util.Random;
 /**
  * Created by ACH02 on 11/12/2016.
  */
-public class RANDOM implements IA {
+public class RANDOM implements AI {
     @Override
     public Action search(State s0) {
 
