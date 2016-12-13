@@ -32,7 +32,7 @@ public class GameC4 {
         System.out.println("Choose difficulty");
         System.out.println("MCTS UCT AI (default): 0 | Random AI : 1");
         int iaChoosed = sc.nextInt();
-        AI ia = new MTCS_UCT(sqrt(2));
+        AI ia = new MTCS_UCT(sqrt(2),1);
         if(iaChoosed == 1){
             ia = new RANDOM();
         }
@@ -47,6 +47,7 @@ public class GameC4 {
 
 
             if(state.getPlayer() == 0){
+
                 System.out.println("Enter column");
                 Action action = new ActionC4(sc.nextInt());
                 if(state.isValideAction(action)){

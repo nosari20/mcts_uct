@@ -55,7 +55,7 @@ public class MTCS_UCT implements AI {
 
     private Node treePolicy(Node i0){
         Node i = i0;
-        while(i0.isNonTerminal()){
+        while(i.isNonTerminal()){
             if(!i.isFullyExpanded()){
                 return expand(i);
             }else{
@@ -118,12 +118,9 @@ public class MTCS_UCT implements AI {
         if(i.state().isComputer()){
             coeff = -1;
         }
-        double b;
-        if(i.simulations() > 0) {
-            b = coeff * (i.victories() / i.simulations()) + this.compromise * sqrt(log(i.parent().simulations()) / i.simulations());
-        }else{
-            b = 1/0;//fail
-        }
-        return b;
+
+        return  coeff * (i.victories() / i.simulations()) + this.compromise * sqrt(log(i.parent().simulations()) / i.simulations());
+
+
     }
 }
