@@ -15,7 +15,7 @@ public class Node {
     private Node parent;
     private List<Node> childrens;
 
-    private int nb_victory;
+    private int nb_victories;
     private int nb_simulations;
     private int no;
 
@@ -70,11 +70,11 @@ public class Node {
     }
 
     public double victories(){
-        return this.nb_victory;
+        return this.nb_victories;
     }
 
     public void reward(double rk){
-        this.nb_victory += rk;
+        this.nb_victories += rk;
     }
 
     public  void addChild(Node i){
