@@ -1,0 +1,105 @@
+.............................
+
+ victoire SKYNET 1
+ victoire HAL 0
+ victoire DRAW 0
+ SKYNET temps 1000
+ HAL temps 1000
+.....................................
+
+ victoire SKYNET 1
+ victoire HAL 0
+ victoire DRAW 0
+ SKYNET temps 2000
+ HAL temps 1000
+.............................
+
+ victoire SKYNET 1
+ victoire HAL 0
+ victoire DRAW 0
+ SKYNET temps 3000
+ HAL temps 1000
+...................
+
+ victoire SKYNET 1
+ victoire HAL 0
+ victoire DRAW 0
+ SKYNET temps 4000
+ HAL temps 1000
+................................
+
+ victoire SKYNET 0
+ victoire HAL 1
+ victoire DRAW 0
+ SKYNET temps 5000
+ HAL temps 1000
+.......................
+
+ victoire SKYNET 1
+ victoire HAL 0
+ victoire DRAW 0
+ SKYNET temps 1000
+ HAL temps 2000
+...................................
+
+ victoire SKYNET 1
+ victoire HAL 0
+ victoire DRAW 0
+ SKYNET temps 2000
+ HAL temps 2000
+...................................
+
+ victoire SKYNET 1
+ victoire HAL 0
+ victoire DRAW 0
+ SKYNET temps 3000
+ HAL temps 2000
+.....................................
+
+ victoire SKYNET 1
+ victoire HAL 0
+ victoire DRAW 0
+ SKYNET temps 4000
+ HAL temps 2000
+.......................
+
+ victoire SKYNET 1
+ victoire HAL 0
+ victoire DRAW 0
+ SKYNET temps 5000
+ HAL temps 2000
+..........................
+
+ victoire SKYNET 0
+ victoire HAL 1
+ victoire DRAW 0
+ SKYNET temps 1000
+ HAL temps 3000
+.........................
+
+ victoire SKYNET 1
+ victoire HAL 0
+ victoire DRAW 0
+ SKYNET temps 2000
+ HAL temps 3000
+..............................
+
+ victoire SKYNET 0
+ victoire HAL 1
+ victoire DRAW 0
+ SKYNET temps 3000
+ HAL temps 3000
+.............................
+
+ victoire SKYNET 1
+ victoire HAL 0
+ victoire DRAW 0
+ SKYNET temps 4000
+ HAL temps 3000
+............................
+
+ victoire SKYNET 0
+ victoire HAL 1
+ victoire DRAW 0
+ SKYNET temps 5000
+ HAL temps 3000

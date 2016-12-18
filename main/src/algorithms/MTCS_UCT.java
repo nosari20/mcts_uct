@@ -15,112 +15,131 @@ import static java.lang.Math.sqrt;
  */
 public class MTCS_UCT implements AI {
 
-    private double budget;
-    private double compromise;
+	private double budget;
+	private double compromise;
 
-    public MTCS_UCT(double budget) {
-        this.budget = budget;
-        this.compromise = sqrt(2);
-    }
+	public int temps = 1000;
+	public int tour = 0;
+	Node best = null;
 
-    public MTCS_UCT(double budget, double compromise) {
-        this.budget = budget;
-        this.compromise = compromise;
-    }
+	public MTCS_UCT(double budget) {
+		this.budget = budget;
+		this.compromise = sqrt(2);
+	}
 
-    public Action search(State s0){
-        long startTime = System.currentTimeMillis() / 1000;
+	public MTCS_UCT(double budget, double compromise) {
+		this.budget = budget;
+		this.compromise = compromise;
+	}
 
-        //Create root node i0 with state s0
-        Node i0 = new Node(null,s0,null);
+	public Action search(State s0) {
+		int a = temps;
 
-        Node il;
+		int b;// = 1000;
 
-        int loop = 0;
+		b = a;
 
-        do{
+		long startTime = System.currentTimeMillis() / a;
 
+		// Create root node i0 with state s0
+		Node i0 = new Node(null, s0, null);
 
-            Node ie = treePolicy(i0);
-            double rk = defaultPolicy(ie);
-            backup(ie,rk);
+		Node il;
 
-            loop++;
-        }while(startTime > ((System.currentTimeMillis() / 1000) - this.budget));
+		int loop = 0;
 
-        System.out.println("\nLoop : " +loop);
-        return bestChild(i0).action();
-    }
+		do {
 
+			Node ie = treePolicy(i0);
+			double rk = defaultPolicy(ie);
+			backup(ie, rk);
 
-    private Node treePolicy(Node i0){
-        Node i = i0;
-        while(i.isNonTerminal()){
-            if(!i.isFullyExpanded()){
-                return expand(i);
-            }else{
-                i = bestChild(i);
-            }
-        }
-        return i;
-    }
+			loop++;
+			// System.out.println(startTime +" > "+ ((System.currentTimeMillis()
+			// / b) - this.budget));
 
-    private Node expand(Node ie){
-        List<Node> is = ie.childrens();
-        List<Action> va = ie.state().validActions();
-        for (Node i:
-                is) {
-           va.remove(i.action());
-        }
-        Action ua = va.get(new Random().nextInt(va.size()));
-        Node in = new Node(ie,ie.state().use(ua),ua);
-        ie.addChild(in);
-        return in;
-    }
+		} while (startTime > ((System.currentTimeMillis() / b) - this.budget));
+		tour = loop;
+		best = bestChild(i0);
+		return bestChild(i0).action();
+	}
 
-    private double defaultPolicy(Node ie){
-        Node i = ie;
-        while(i.isNonTerminal()){
-            i = expand(i);
-            i.visit();
-        }
-        return i.state().reward();
-    }
+	private Node treePolicy(Node i0) {
+		Node i = i0;
+		while (i.isNonTerminal()) {
+			if (!i.isFullyExpanded()) {
+				return expand(i);
+			} else {
+				i = bestChild(i);
+			}
+		}
+		return i;
+	}
 
-    private void backup(Node il, double rk){
-        Node i = il;
-        while(i != null){
-            i.visit();
-            i.reward(rk);
-            i = i.parent();
-        }
-    }
+	private Node expand(Node ie) {
+		List<Node> is = ie.childrens();
+		List<Action> va = ie.state().validActions();
+		for (Node i : is) {
+			va.remove(i.action());
+		}
+		Action ua = va.get(new Random().nextInt(va.size()));
+		Node in = new Node(ie, ie.state().use(ua), ua);
+		ie.addChild(in);
+		return in;
+	}
 
-    private Node bestChild(Node i0){
-        List<Node> ic = i0.childrens();
-        double tmpb;
-        double bmax = -Double.MAX_VALUE;
-        Node ib = null;
+	private double defaultPolicy(Node ie) {
+		Node i = ie;
+		while (i.isNonTerminal()) {
+			i = expand(i);
+			i.visit();
+		}
+		return i.state().reward();
+	}
 
-        for (Node i:
-             ic) {
-            tmpb = B(i);
-            if(tmpb > bmax){
-                bmax = tmpb;
-                ib = i;
-            }
-        }
-        return ib;
-    }
+	private void backup(Node il, double rk) {
+		Node i = il;
+		while (i != null) {
+			i.visit();
+			i.reward(rk);
+			i = i.parent();
+		}
+	}
 
-    private double B(Node i){
-        double coeff = 1;
-        if(i.state().isComputer()){
-            coeff = -1;
-        }
+	private Node bestChild(Node i0) {
+		List<Node> ic = i0.childrens();
+		double tmpb;
+		double bmax = -Double.MAX_VALUE;
+		Node ib = null;
 
-        return  coeff * (i.victories() / i.simulations()) + this.compromise * sqrt(log(i.parent().simulations()) / i.simulations());
+		for (Node i : ic) {
+			tmpb = B(i);
+			if (tmpb > bmax) {
+				bmax = tmpb;
+				ib = i;
+			}
+		}
+		return ib;
+	}
 
+	private double B(Node i) {
+		double coeff = 1;
+		if (i.state().isComputer()) {
+			coeff = -1;
+		}
 
-    }
+		return coeff * (i.victories() / i.simulations()) + this.compromise
+				* sqrt(log(i.parent().simulations()) / i.simulations());
+
+	}
+
+	public String reponse() {
+		String s = "\n";
+		s = s + "nombre de simulation : " + tour;
+		String tmp = (B(best) * 100) + " ";
+		s = s +("\ntaux de victoire : "
+				+ tmp.substring(0, tmp.indexOf(".")) + " % \n");
+
+		return s;
+	}
 }

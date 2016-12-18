@@ -16,4 +16,10 @@ public class RANDOM implements AI {
         List<Action> va = s0.validActions();
         return va.get(new Random().nextInt(va.size()));
     }
+
+	@Override
+	public String reponse() {
+		// TODO Auto-generated method stub
+		return "";
+	}
 }

@@ -9,4 +9,8 @@ import algorithms.tree.State;
 public interface AI {
 
     public Action search(State s0);
+    
+    public String reponse();
 }
+
+
