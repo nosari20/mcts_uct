@@ -23,7 +23,7 @@ public class GameC4 {
 		Scanner sc = new Scanner(System.in);
 
 		System.out.println("Choose who start");
-		System.out.println("Human (default): 0 | Computer : 1");
+		System.out.println("Human (default): 0 | Computer : 1 | IA vs IA : 666");
 		int player = sc.nextInt();
 		StateC4 state = new StateC4(0);
 
