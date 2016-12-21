@@ -51,6 +51,9 @@ public class MTCS_UCT_Biased implements AI {
 		do {
 
 			Node ie = treePolicy(i0);
+			if(ie.state().end() == State.End.COMPUTER_WIN){
+				return ie.action();
+			}
 			double rk = defaultPolicy(ie);
 			backup(ie, rk);
 
@@ -84,6 +87,13 @@ public class MTCS_UCT_Biased implements AI {
 		}
 		//Regarder s'il existe une action gagnante si oui la choisir sinon random
 		Action ua = va.get(new Random().nextInt(va.size()));
+		for(Action a : va){
+			if(ie.state().use(a).end()== State.End.COMPUTER_WIN){
+				ua = a;
+				break;
+			}
+		}
+
 		Node in = new Node(ie, ie.state().use(ua), ua);
 		ie.addChild(in);
 		return in;

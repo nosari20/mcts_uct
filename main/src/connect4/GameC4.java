@@ -7,6 +7,7 @@ import java.util.Scanner;
 
 import algorithms.AI;
 import algorithms.MTCS_UCT;
+import algorithms.MTCS_UCT_Biased;
 import algorithms.RANDOM;
 import algorithms.tree.Action;
 import algorithms.tree.State;
@@ -140,11 +141,14 @@ public class GameC4 {
 			}
 
 			System.out.println("Choose difficulty");
-			System.out.println("MCTS UCT AI (default): 0 | Random AI : 1");
+			System.out.println("MCTS UCT AI (default): 0 | MCTS UCT Biased AI : 1 | Random AI : 2 ");
 			int iaChoosed = sc.nextInt();
 			AI ia = new MTCS_UCT(sqrt(2), 1);
-			if (iaChoosed == 1) {
+			if (iaChoosed == 2) {
 				ia = new RANDOM();
+			}
+			if(iaChoosed == 1){
+				ia = new MTCS_UCT_Biased(sqrt(2), 1);
 			}
 
 			StateC4 nextState;
