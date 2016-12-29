@@ -18,7 +18,7 @@ public class MTCS_UCT_Biased implements AI {
 	private double budget;
 	private double compromise;
 
-	public int temps = 1000;
+	public int temps = 3000;
 	public int tour = 0;
 	Node best = null;
 
@@ -46,13 +46,14 @@ public class MTCS_UCT_Biased implements AI {
 
 		Node il;
 
-		int loop = 0;
+		int loop = 0; // nombre de simulation
 
 		do {
 
 			Node ie = treePolicy(i0);
 			if(ie.state().end() == State.End.COMPUTER_WIN){
-				return ie.action();
+				best = bestChild(i0);
+				return ie.action();  // max
 			}
 			double rk = defaultPolicy(ie);
 			backup(ie, rk);
@@ -145,6 +146,10 @@ public class MTCS_UCT_Biased implements AI {
 	}
 
 	public String reponse() {
+		
+		if(best==null){
+			return "";
+		}
 		String s = "\n";
 		s = s + "nombre de simulation : " + tour;
 		String tmp = (B(best) * 100) + " ";

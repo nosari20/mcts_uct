@@ -46,7 +46,7 @@ public class MTCS_UCT implements AI {
 
 		Node il;
 
-		int loop = 0;
+		int loop = 0;  //nombre simulation
 
 		do {
 
