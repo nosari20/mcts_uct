@@ -13,7 +13,7 @@ import static java.lang.Math.sqrt;
 /**
  * Created by ACH02 on 09/12/2016.
  */
-public class MTCS_UCT_Biased implements AI {
+public class MTCS_UCT_MaxRob implements AI {
 
 	private double budget;
 	private double compromise;
@@ -22,12 +22,12 @@ public class MTCS_UCT_Biased implements AI {
 	public int tour = 0;
 	Node best = null;
 
-	public MTCS_UCT_Biased(double budget) {
+	public MTCS_UCT_MaxRob(double budget) {
 		this.budget = budget;
 		this.compromise = sqrt(2);
 	}
 
-	public MTCS_UCT_Biased(double budget, double compromise) {
+	public MTCS_UCT_MaxRob(double budget, double compromise) {
 		this.budget = budget;
 		this.compromise = compromise;
 	}
@@ -51,9 +51,9 @@ public class MTCS_UCT_Biased implements AI {
 		do {
 
 			Node ie = treePolicy(i0);
-			if(ie.state().end() == State.End.COMPUTER_WIN){
-				best = bestChild(i0);
-				return ie.action();  // max
+			if (ie.state().end() == State.End.COMPUTER_WIN) {
+				best = ie;
+				// return ie.action(); // max
 			}
 			double rk = defaultPolicy(ie);
 			backup(ie, rk);
@@ -64,10 +64,23 @@ public class MTCS_UCT_Biased implements AI {
 
 		} while (startTime > ((System.currentTimeMillis() / b) - this.budget));
 		tour = loop;
-		best = bestChild(i0);
-		
-		
-		return bestChild(i0).action();
+		// best = bestChild(i0);
+
+		System.out.println("robuste : " + bestChild(i0).action());
+		System.out.println("taux victoire " + B(bestChild(i0)));
+		if (best == null) {
+			System.out.println("max : condition non trouvé");
+		} else {
+			System.out.println("max : " + best.action());
+			System.out.println("taux victoire " + B(best));
+		}
+
+		if (best != null && B(best) > B(bestChild(i0))) {
+			return best.action();
+		} else {
+
+			return bestChild(i0).action();
+		}
 	}
 
 	private Node treePolicy(Node i0) {
@@ -88,10 +101,11 @@ public class MTCS_UCT_Biased implements AI {
 		for (Node i : is) {
 			va.remove(i.action());
 		}
-		//Regarder s'il existe une action gagnante si oui la choisir sinon random
+		// Regarder s'il existe une action gagnante si oui la choisir sinon
+		// random
 		Action ua = va.get(new Random().nextInt(va.size()));
-		for(Action a : va){
-			if(ie.state().use(a).end()== State.End.COMPUTER_WIN){
+		for (Action a : va) {
+			if (ie.state().use(a).end() == State.End.COMPUTER_WIN) {
 				ua = a;
 				break;
 			}
@@ -148,15 +162,15 @@ public class MTCS_UCT_Biased implements AI {
 	}
 
 	public String reponse() {
-		
-		if(best==null){
+
+		if (best == null) {
 			return "";
 		}
 		String s = "\n";
 		s = s + "nombre de simulation : " + tour;
 		String tmp = (B(best) * 100) + " ";
-		s = s +("\ntaux de victoire : "
-				+ tmp.substring(0, tmp.indexOf(".")) + " % \n");
+		s = s
+				+ ("\ntaux de victoire : " + tmp.substring(0, tmp.indexOf(".")) + " % \n");
 
 		return s;
 	}

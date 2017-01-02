@@ -8,6 +8,7 @@ import java.util.Scanner;
 import algorithms.AI;
 import algorithms.MTCS_UCT;
 import algorithms.MTCS_UCT_Biased;
+import algorithms.MTCS_UCT_MaxRob;
 import algorithms.RANDOM;
 import algorithms.tree.Action;
 import algorithms.tree.State;
@@ -19,6 +20,7 @@ import java.io.*;
  */
 public class GameC4 {
 
+	@SuppressWarnings("unused")
 	public static void main(String[] args) {
 
 		Scanner sc = new Scanner(System.in);
@@ -26,12 +28,10 @@ public class GameC4 {
 		System.out.println("Choose who start");
 		System.out
 				.println("Human (default): 0 | Computer : 1 | IA vs IA : 666");
-		System.out
-				.println("IA vs IA joue 10 parties (SKYNET vs HAL)"
-						+ "\n SKYNET jouant toujour en 1er"
-						+ "\n affiche a chaque partie qui a gagner"
-						+ "\n le temps de la partie"
-						+ "\n son nombre de tour");
+		System.out.println("IA vs IA joue 10 parties (SKYNET vs HAL)"
+				+ "\n SKYNET jouant toujour en 1er"
+				+ "\n affiche a chaque partie qui a gagner"
+				+ "\n le temps de la partie" + "\n son nombre de tour");
 		int player = sc.nextInt();
 		StateC4 state = new StateC4(0);
 
@@ -67,8 +67,8 @@ public class GameC4 {
 			for (int i = 1; i <= 10; i++) {
 
 				temps = (int) System.currentTimeMillis();
-				
-				System.out.println("Partie "+i+"/10");
+
+				System.out.println("Partie " + i + "/10");
 
 				if (!irst) {
 
@@ -220,14 +220,36 @@ public class GameC4 {
 
 			System.out.println("Choose difficulty");
 			System.out
-					.println("MCTS UCT AI (default): 0 | MCTS UCT Biased AI : 1 | Random AI : 2 ");
+					.println("MCTS UCT AI (default): 0 | MCTS UCT Biased AI : 1 | "
+							+ "Random AI : 2 | MCTS UCT Biased AI : 3");
 			int iaChoosed = sc.nextInt();
-			AI ia = new MTCS_UCT(sqrt(2), 1);
-			if (iaChoosed == 2) {
+			AI ia = null;
+
+			switch (iaChoosed) {
+			case 3:
+				ia = new MTCS_UCT_MaxRob(sqrt(2), 1);
+				System.out.println("temps reflexion algo en milliseconde : ");
+				((MTCS_UCT_MaxRob) ia).temps = sc.nextInt();
+				break;
+			case 2:
 				ia = new RANDOM();
-			}
-			if (iaChoosed == 1) {
+				break;
+			case 1:
 				ia = new MTCS_UCT_Biased(sqrt(2), 1);
+				System.out.println("temps reflexion algo en milliseconde : ");
+				((MTCS_UCT_Biased) ia).temps = sc.nextInt();
+				break;
+			case 0:
+			default:
+				ia = new MTCS_UCT(sqrt(2), 1);
+				System.out.println("temps reflexion algo en milliseconde : ");
+				((MTCS_UCT) ia).temps = sc.nextInt();
+				break;
+			}
+
+			if (ia == null) {
+				System.out.println("erreur improbable");
+				System.exit(13);
 			}
 
 			StateC4 nextState;
